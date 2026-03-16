@@ -104,10 +104,7 @@ project-root
 ├── test-data
 │   └── formData.ts
 
-BasePage.ts
-
 ```
-
 This keeps **selectors and actions separated from test logic**, which improves maintainability.
 
 ---
@@ -144,6 +141,7 @@ Example:
 ```
 bookDemoPage.enterEmail()
 bookDemoPage.submitForm()
+
 ```
 
 **Use reusable test data**
@@ -167,20 +165,32 @@ This test ensures that **personal email domains are rejected**, which is a key b
 ### Playwright Example
 
 ```typescript
-import { test, expect } from '@playwright/test';
 
-test('should reject gmail email addresses', async ({ page }) => {
-  await page.goto('https://safetyculture.com/book-demo');
+import { test } from '@playwright/test';
+import { BookDemoPage } from '../pages/BookDemoPage';
+import { formData } from '../test-data/formData';
 
-  await page.fill('input[type="email"]', 'test@gmail.com');
-  await page.fill('input[type="tel"]', '1234567890');
+test.describe('Book Demo Form Tests @For Assessment Only', () => { 
 
-  await page.click('button:has-text("Book a Demo")');
+  let bookDemoPage: BookDemoPage;
 
-  await expect(
-    page.getByText('Please enter a different email address. This form does not accept addresses from gmail.com.')
-  ).toBeVisible();
+  test.beforeEach(async ({ page }) => {
+    bookDemoPage = new BookDemoPage(page);
+    await bookDemoPage.navigate('https://safetyculture.com/book-demo');
+    await bookDemoPage.isPageLoaded();
+  });
+
+  test('Negative: Gmail email should show validation immediately after input', async () => {
+    // Arrange & Act — no submit needed, validation triggers on input
+    await bookDemoPage.enterEmail(formData.invalidPersonalEmail);
+    await bookDemoPage.blurField(); // click away from the field to trigger inline validation
+
+    // Assert
+    await bookDemoPage.verifyGmailValidation();
+  });
+
 });
+
 ```
 
 ### Why This Test
@@ -188,7 +198,6 @@ test('should reject gmail email addresses', async ({ page }) => {
 I chose this test because:
 
 * It validates an **important business rule**.
-* It covers **input validation and form submission behavior**.
 * It ensures the system prevents **invalid lead data** from personal email domains.
 
 ---
