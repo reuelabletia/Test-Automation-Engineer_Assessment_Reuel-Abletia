@@ -55,7 +55,7 @@ test.describe('Book Demo Form Tests @For Assessment Only', () => {
   });
 
 
-  // ─── POSITIVE ──────────────────────────────────────────────────────────────── I commented out this code so that it doesn’t send too many requests to the website.
+  // ─── POSITIVE ──────────────────────────────────────────────────────────────── I commented out this code so that it doesn’t send too many requests to the website when run.
 //   test('Positive: User should submit form successfully with valid business data', async () => {
 //     // Arrange
 //     await bookDemoPage.enterEmail(formData.validBusinessEmail);
