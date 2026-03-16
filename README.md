@@ -21,7 +21,7 @@ These are critical because they directly affect **data quality and successful fo
 
 **Dynamic field behavior**
 
-* Additional fields (First Name, Last Name, Industry, Company Name, Number of Employees) appear **only after a valid email is entered**.
+* Additional fields (First Name, Last Name, Industry, Company Name, Number of Employees) appear **only after an email is entered**.
 * This conditional behavior must work correctly to avoid blocking users.
 
 **Submission logic**
@@ -64,7 +64,6 @@ Some key risks include:
 
 * Personal domains (gmail, yahoo, etc.)
 * Incorrect email formats
-* Valid business emails with uncommon domains
 
 **Phone number edge cases**
 
@@ -93,14 +92,20 @@ I would structure the automation suite using a **Page Object Model (POM)**.
 Example structure:
 
 ```
-tests/
-  book-demo.spec.ts
+project-root
+│
+├── pages
+│   ├── BasePage.ts
+│   └── BookDemoPage.ts
+│
+├── tests
+│   └── book-demo.spec.ts
+│
+├── test-data
+│   └── formData.ts
 
-pages/
-  bookDemoPage.ts
+BasePage.ts
 
-fixtures/
-  testData.ts
 ```
 
 This keeps **selectors and actions separated from test logic**, which improves maintainability.
